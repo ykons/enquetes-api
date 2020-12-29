@@ -1,16 +1,13 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
-        "module": "commonjs",
-        "target": "ES2020",
+        "module": "CommonJS",
+        "target": "ES2019",
         "esModuleInterop": true,
         "allowJs": true,
         "strictNullChecks": true
     },
     "exclude": [
         "node_modules"
-    ],
-    "rules": {
-        "@typescript-eslint/strict-boolean-expressions": "off"
-    }
+    ]
 }
