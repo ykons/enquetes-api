@@ -4,9 +4,13 @@
         "module": "commonjs",
         "target": "ES2020",
         "esModuleInterop": true,
-        "allowJs": true
+        "allowJs": true,
+        "strictNullChecks": true
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "rules": {
+        "@typescript-eslint/strict-boolean-expressions": "off"
+    }
 }
