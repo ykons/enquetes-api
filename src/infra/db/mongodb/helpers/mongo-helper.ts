@@ -1,24 +1,29 @@
-import { MongoClient, Db, Collection } from 'mongodb'
+import { MongoClient, Collection } from 'mongodb'
 
 export const MongoHelper = {
   connection: null as unknown as MongoClient,
-  db: null as unknown as Db,
+  mongoUri: '',
 
   async connect (uri?: string) {
-    const mongoUri: string = uri ?? process.env.MONGO_URL ?? ''
-    this.connection = await MongoClient.connect(mongoUri, {
+    this.mongoUri = uri ?? process.env.MONGO_URL
+    this.connection = await MongoClient.connect(this.mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    this.db = await this.connection.db()
   },
 
   async disconnect () {
     await this.connection.close()
+    this.connection = null
   },
 
-  getCollection (name: string): Collection {
-    return this.db.collection(name)
+  async getCollection (name: string): Promise<Collection> {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (!this.connection?.isConnected()) {
+      await this.connect(this.mongoUri)
+    }
+
+    return this.connection.db().collection(name)
   },
 
   map: (collection: any): any => {
