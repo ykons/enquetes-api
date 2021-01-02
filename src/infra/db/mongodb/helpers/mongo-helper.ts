@@ -1,11 +1,11 @@
 import { MongoClient, Db, Collection } from 'mongodb'
 
 export const MongoHelper = {
-  connection: null as MongoClient,
-  db: null as Db,
+  connection: null as unknown as MongoClient,
+  db: null as unknown as Db,
 
   async connect (uri?: string) {
-    const mongoUri = uri ?? process.env.MONGO_URL
+    const mongoUri: string = uri ?? process.env.MONGO_URL ?? ''
     this.connection = await MongoClient.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
