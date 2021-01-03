@@ -7,6 +7,12 @@ export const expressRouteAdapter = (controller: Controller) => {
       body: req.body
     }
     const httpRespose = await controller.handle(httpRequest)
-    res.status(httpRespose.statusCode).json(httpRespose.body)
+    if (httpRespose.statusCode === 200) {
+      res.status(httpRespose.statusCode).json(httpRespose.body)
+    } else {
+      res.status(httpRespose.statusCode).json({
+        error: httpRespose.body.message
+      })
+    }
   }
 }
