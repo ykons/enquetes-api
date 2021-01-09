@@ -38,7 +38,6 @@ const makeController = (): Controller => {
       return Promise.resolve(ok(makeFakeAccount()))
     }
   }
-
   return new ControllerStub()
 }
 
@@ -47,7 +46,6 @@ const makeLogErrorRepository = (): LogErrorRepository => {
     async logError (stack: string): Promise<void> {
     }
   }
-
   return new LogErrorRepositoryStub()
 }
 
@@ -55,7 +53,6 @@ const makeSut = (): SutType => {
   const controllerStub = makeController()
   const logErrorRepositoryStub = makeLogErrorRepository()
   const sut = new LogControllerDecorator(controllerStub, logErrorRepositoryStub)
-
   return {
     sut,
     controllerStub,
@@ -68,14 +65,12 @@ describe('LogController Decorator', () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
     const httpRequest: HttpRequest = makeFakeRequest()
-
     await sut.handle(httpRequest)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return the same result of the controller', async () => {
     const { sut } = makeSut()
-
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse.statusCode).toBe(200)
     expect(httpResponse.body).toEqual(makeFakeAccount())
@@ -88,7 +83,6 @@ describe('LogController Decorator', () => {
       return Promise.resolve(serverError)
     })
     const logErrorSpy = jest.spyOn(logErrorRepositoryStub, 'logError')
-
     await sut.handle(makeFakeRequest())
     expect(logErrorSpy).toHaveBeenCalledWith(serverError.body.stack)
   })

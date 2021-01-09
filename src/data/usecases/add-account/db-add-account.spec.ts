@@ -26,7 +26,6 @@ const makeEncrypter = (): Encrypter => {
       return new Promise(resolve => resolve('hashed_password'))
     }
   }
-
   return new EncrypterStub()
 }
 
@@ -36,7 +35,6 @@ const makeAddAccountRepository = (): AddAccountRepository => {
       return Promise.resolve(makeFakeAccount())
     }
   }
-
   return new AddAccountRepositoryStub()
 }
 
@@ -44,7 +42,6 @@ const makeSut = (): SutType => {
   const encrypterStub = makeEncrypter()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
-
   return {
     sut,
     encrypterStub,
@@ -56,7 +53,6 @@ describe('DbAddAccount Usecase', () => {
   test('Should call Encrypter with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
-
     await sut.add(makeFakeAccountData())
     expect(encryptSpy).toHaveBeenCalledWith('valid_password')
   })
@@ -66,7 +62,6 @@ describe('DbAddAccount Usecase', () => {
     jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
       Promise.reject(new Error())
     )
-
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrowError()
   })
@@ -74,7 +69,6 @@ describe('DbAddAccount Usecase', () => {
   test('Should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
-
     await sut.add(makeFakeAccountData())
     expect(addSpy).toHaveBeenCalledWith({
       name: 'valid_name',
@@ -88,14 +82,12 @@ describe('DbAddAccount Usecase', () => {
     jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(
       Promise.reject(new Error())
     )
-
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrowError()
   })
 
   test('Should return an account on success', async () => {
     const { sut } = makeSut()
-
     const account = await sut.add(makeFakeAccountData())
     expect(account).toEqual(makeFakeAccount())
   })

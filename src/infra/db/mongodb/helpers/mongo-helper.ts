@@ -22,7 +22,6 @@ export const MongoHelper = {
     if (!this.connection?.isConnected()) {
       await this.connect(this.mongoUri)
     }
-
     return this.connection.db().collection(name)
   },
 
