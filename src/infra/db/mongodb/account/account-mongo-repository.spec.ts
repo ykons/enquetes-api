@@ -54,7 +54,7 @@ describe('Account Mongo Repository', () => {
   test('Should return null if loadByEmail fails', async () => {
     const sut = makeSut()
     const account = await sut.loadByEmail('any_email@acme.com')
-    expect(account).toBeFalsy()
+    expect(account).toBeNull()
   })
 
   test('Should update the account accessToken on updateAccessToken success', async () => {
