@@ -1,7 +1,7 @@
 import { HttpRequest, AddAccount, AddAccountModel, AccountModel, Authentication, AuthenticationModel } from './signup-controller-protocols'
-import { MissingParamError } from '../../errors'
+import { MissingParamError, EmailInUseError } from '../../errors'
 import { SignUpController } from './signup-controller'
-import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
+import { badRequest, ok, serverError, forbidden } from '../../helpers/http/http-helper'
 import { Validation } from '../../protocols/validation'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -86,6 +86,13 @@ describe('SignUp Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 
   test('Should return 200 if AddAccount returns a valid account', async () => {
