@@ -1,6 +1,6 @@
-node_modules
-dist
-data
+/node_modules
+/dist
+/data
 .vscode
-coverage
+/coverage
 globalConfig.json
