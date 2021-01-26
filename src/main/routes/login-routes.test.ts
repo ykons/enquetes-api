@@ -49,6 +49,15 @@ describe('Login Routes', () => {
           password: '123'
         })
         .expect(200)
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'Alexandro Silva',
+          email: 'alexandro@ikons.com.br',
+          password: '123',
+          passwordConfirmation: '123'
+        })
+        .expect(403)
     })
 
     test('Should return 401 on login', async () => {
